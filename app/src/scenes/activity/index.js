@@ -125,14 +125,21 @@ const Activities = ({ date, user, project }) => {
   };
 
   const getTotal = () => {
-    return (activities.reduce((acc, a) => acc + a.total, 0) / 8).toFixed(2);
+    return (activities.reduce((acc, a) => acc + a.total, 0) / 8);
+  };
+
+  const calculatedPercentage = (e) => {
+    const totalPerActivity = e.total / 8;
+    const totalOverall = getTotal();
+    if (totalOverall === 0) return "0.00%";
+    const result = (totalPerActivity / totalOverall) * 100;
+    return result.toFixed(2) + '%';
   };
 
   return (
     <div className="flex flex-wrap py-3 gap-4 text-black">
       <div className="w-screen md:w-full p-2 md:!px-8">
         {/* Table Container */}
-        {true && (
           <div className="mt-2 rounded-xl bg-[#fff] overflow-auto">
             <div className="overflow-x-auto">
               <table className="w-full">
@@ -174,6 +181,7 @@ const Activities = ({ date, user, project }) => {
                     })}
                   </tr>
                   {activities.map((e, i) => {
+                    console.log({e})
                     return (
                       <React.Fragment key={e.project}>
                         <tr className="border-t border-b border-r border-[#E5EAEF]" key={`1-${e._id}`} onClick={() => setOpen(i)}>
@@ -184,7 +192,7 @@ const Activities = ({ date, user, project }) => {
                               </div>
                               <div className="flex flex-col items-end">
                                 <div className="text-xs italic font-normal">{(e.total / 8).toFixed(2)} days</div>
-                                <div className="text-[10px] italic font-normal">{(((e.total / 8).toFixed(2) / getTotal()) * 100).toFixed(2)}%</div>
+                                <div className="text-[10px] italic font-normal">{calculatedPercentage(e)}</div>
                               </div>
                             </div>
                           </th>
@@ -211,7 +219,7 @@ const Activities = ({ date, user, project }) => {
                                 <textarea
                                   value={e.comment}
                                   onChange={(e) => onUpdateComment(i, e.target.value)}
-                                  placeholder={`Please add a comment on what you deliver on ${e.project} (We need to show value created to clients)`}
+                                  placeholder={`Please add a comment on what you deliver on ${e.projectName} (We need to show value created to clients)`}
                                   rows={6}
                                   className="w-full text-sm pt-2 pl-2"
                                 />
@@ -234,7 +242,6 @@ const Activities = ({ date, user, project }) => {
               Save
             </button>
           </div>
-        )}
       </div>
     </div>
   );

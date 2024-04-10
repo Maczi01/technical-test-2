@@ -5,7 +5,7 @@ import api from "../services/api";
 // eslint-disable-next-line react/display-name
 export default ({ value, active = true, onChange }) => {
   const [projects, setProjects] = useState([]);
-  
+
   useEffect(() => {
     (async () => {
       let str = ``;
@@ -18,7 +18,7 @@ export default ({ value, active = true, onChange }) => {
   return (
     <div>
       <select
-        className="w-[180px] bg-[#FFFFFF] text-[12px] text-[#212325] font-semibold py-[4px] px-[4px] rounded-[5px] border-r-[16px] border-[transparent] cursor-pointer shadow-sm"
+        className="w-[180px] bg-[#FFFFFF] text-[14px] text-[#212325] font-normal py-[10px] px-[14px] rounded-[10px] border-r-[16px] border-[transparent] cursor-pointer shadow-sm"
         name="project"
         value={value || ""}
         onChange={(e) => {

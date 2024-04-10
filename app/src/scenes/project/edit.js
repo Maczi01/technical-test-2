@@ -10,16 +10,25 @@ import toast from "react-hot-toast";
 
 export default function EditProject() {
   const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [bufferOtherLink, setBufferOtherLink] = useState("");
   const [bufferOtherLinkLabel, setBufferOtherLinkLabel] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
-    (async () => {
-      const { data: u } = await api.get(`/project/${id}`);
-      setProject(u);
-    })();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const { data: u } = await api.get(`/project/${id}`);
+        setProject(u);
+      } catch (error) {
+        setError(error); // Set error state if there's an error
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or failure
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const history = useHistory();
 
@@ -31,7 +40,18 @@ export default function EditProject() {
     history.push("/projects");
   }
 
-  if (!project) return <Loader />;
+  if (loading) return <Loader />; // Render loading state
+
+  if (error) {
+    // Render error message or handle error as per your requirement
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!project) {
+    // Handle case where project is not found
+    return <div className="flex justify-center mt-4">Project not found</div>;
+  }
+
   return (
     <div>
       <div className="appContainer pt-24">
